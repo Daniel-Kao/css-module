@@ -1,25 +1,24 @@
-import Layout from "./containers/Layout";
-import Home from "./containers/Home";
-import Login from "./containers/Login";
+import Layout from './containers/Layout';
+import Home from './containers/Home';
+import Login from './containers/Login';
 
 export default [
   {
-    path: "/",
+    path: '/',
     component: Layout,
-    key: "app",
     routes: [
       {
-        path: "/",
+        path: '/',
         component: Home,
         exact: true,
-        key: "home"
+        key: 'home',
       },
       {
-        path: "/login",
+        path: '/login',
         component: Login,
         exact: true,
-        key: "login"
-      }
-    ]
-  }
+        key: 'login',
+      },
+    ],
+  },
 ];

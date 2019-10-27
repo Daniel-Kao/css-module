@@ -1,12 +1,12 @@
-import React from "react";
-import { renderRoutes } from "react-router-config";
-import Header from "../../components/Header";
+import React from 'react';
+import { renderRoutes } from 'react-router-config';
+import Header from '../../components/Header';
 
-const Layout = ({ route }) => {
+const Layout = props => {
   return (
     <div>
       <Header />
-      {renderRoutes(route.routes)}
+      {renderRoutes(props.route.routes)}
     </div>
   );
 };

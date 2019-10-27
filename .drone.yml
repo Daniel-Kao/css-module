@@ -1,0 +1,65 @@
+workspace:
+  base: /root/drone/deploy
+  path: stock-realtime-ding
+pipeline:
+  build:
+    image: dev-fintech-hub.cgws.com/plugins/node:10.15.2
+    pull: true
+    commands:
+      - yarn install
+      - CI="false" yarn run build
+
+  build_push_dev:
+    image: plugins/docker
+    registry: dev-fintech-hub.cgws.com
+    pull: true
+    repo: dev-fintech-hub.cgws.com/fintech-oss/stock-realtime-ding
+    secrets: [docker_username, docker_password]
+    insecure: true
+    dockerfile: ./Dockerfile
+    debug: true
+    tags: ${DRONE_COMMIT_SHA:0:10}
+    when:
+      event: [push]
+      branch: [develop, feature/*, release/*]
+
+  deploy_dev:
+    image: dev-fintech-hub.cgws.com/devops/drone-k8s-deploy:latest
+    pull: true
+    environment:
+      - K8S_NAMESPACE=fintech-server
+      - REPO=dev-fintech-hub.cgws.com/fintech-oss/stock-realtime-ding
+      - DEPLOYMENTS=stock-realtime-ding
+      - CONTAINER=stock-realtime-ding
+      - TAG=${DRONE_COMMIT_SHA:0:10}
+      - DEBUG=true
+    when:
+      event: [push]
+      branch: [develop, feature/*, release/*]
+
+  build_push_release:
+    image: plugins/docker
+    registry: dev-fintech-hub.cgws.com
+    pull: true
+    repo: dev-fintech-hub.cgws.com/fintech-oss/stock-realtime-ding
+    secrets: [docker_username, docker_password]
+    insecure: true
+    dockerfile: ./Dockerfile
+    tags:
+      - ${DRONE_BRANCH/\//-}
+    when:
+      event: [push]
+      branch: [release/*]
+
+  build_push_production:
+    image: plugins/docker
+    registry: dev-fintech-hub.cgws.com
+    pull: true
+    repo: dev-fintech-hub.cgws.com/fintech-oss/stock-realtime-ding
+    secrets: [docker_username, docker_password]
+    insecure: true
+    dockerfile: ./Dockerfile
+    tags:
+      - ${DRONE_TAG}
+    when:
+      event: [tag]
