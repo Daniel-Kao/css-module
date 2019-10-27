@@ -1,8 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import styles from "./styles.scss";
 import { Button } from "antd-mobile";
 
-const Home = () => {
+const Home = props => {
+  console.log(props);
   return (
     <p className={styles.red}>
       home ha
@@ -11,4 +13,8 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = state => ({
+  ...state
+});
+
+export default connect(mapStateToProps)(Home);

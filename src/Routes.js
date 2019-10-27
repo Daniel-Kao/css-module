@@ -1,11 +1,11 @@
-import App from "./App";
+import Layout from "./containers/Layout";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 
 export default [
   {
     path: "/",
-    component: App,
+    component: Layout,
     key: "app",
     routes: [
       {
